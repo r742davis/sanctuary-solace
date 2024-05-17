@@ -16,6 +16,7 @@ mongoose
   .catch((err) => console.log("Could not connect to MongoDB", err));
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.use(express.json());
 
 // GET ALL NOTES
 app.get("/", async (req, res) => {
@@ -34,4 +35,23 @@ app.get("/:id", async (req, res) => {
       }
     })
     .catch((err) => console.error("Error finding note:", err));
+});
+
+// NEW NOTE
+app.post("/new", async (req, res) => {
+  try {
+    const { title, content } = req.body;
+
+    const note = new Note({
+      title,
+      content,
+      date: Date().now,
+    });
+
+    const savedNote = await note.save();
+
+    res.status(201).json(savedNote);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
 });
