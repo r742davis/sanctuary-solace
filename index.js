@@ -33,7 +33,8 @@ app.get("/:id", async (req, res) => {
     if (!foundNote) res.json(`Cannot find Note with ID: ${id}`);
     else res.json(foundNote);
   } catch (error) {
-    console.error("Error finding note:", error);
+    console.error("Note not found!", error);
+    res.status(404).json({ error: error.message });
   }
 });
 
@@ -51,8 +52,8 @@ app.post("/new", async (req, res) => {
     const savedNote = await note.save();
 
     res.status(201).json(savedNote);
-  } catch (err) {
-    res.status(400).json({ error: err.message });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -64,6 +65,19 @@ app.delete("/:id", async (req, res) => {
     res.status(200).json({ success: true, deletedNote: test._doc });
   } catch (error) {
     console.error("Error deleting note:", error);
-    res.status(500).json({ success: false });
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// UPDATE SINGLE NOTE
+app.put("/:id", async (req, res) => {
+  try {
+    const updatedNote = await Note.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).send(updatedNote);
+  } catch (error) {
+    console.error("Error updating note:", error);
+    res.status(500).json({ error: error.message });
   }
 });
