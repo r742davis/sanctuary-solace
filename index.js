@@ -26,15 +26,15 @@ app.get("/", async (req, res) => {
 
 // GET SINGLE NOTE
 app.get("/:id", async (req, res) => {
-  Note.findById(req.params.id)
-    .then((note) => {
-      if (!note) {
-        console.log("Note not found");
-      } else {
-        res.json(note);
-      }
-    })
-    .catch((err) => console.error("Error finding note:", err));
+  try {
+    const id = req.params.id;
+    const foundNote = await Note.findById(req.params.id);
+
+    if (!foundNote) res.json(`Cannot find Note with ID: ${id}`);
+    else res.json(foundNote);
+  } catch (error) {
+    console.error("Error finding note:", error);
+  }
 });
 
 // NEW NOTE
