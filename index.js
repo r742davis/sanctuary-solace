@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors');
 const app = express();
 
 const Note = require("./models/Note");
@@ -18,6 +19,7 @@ mongoose
 
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
 app.use(express.json());
+app.use(cors());
 
 // GET ALL NOTES
 app.get("/", async (req, res) => {
