@@ -55,3 +55,15 @@ app.post("/new", async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
+// DELETE NOTE
+app.delete("/:id", async (req, res) => {
+  try {
+    const test = await Note.findOneAndDelete(req.params.id);
+
+    res.status(200).json({ success: true, deletedNote: test._doc });
+  } catch (error) {
+    console.error("Error deleting note:", error);
+    res.status(500).json({ success: false });
+  }
+});
