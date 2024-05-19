@@ -63,7 +63,7 @@ app.post("/new", async (req, res) => {
 // DELETE NOTE
 app.delete("/:id", async (req, res) => {
   try {
-    const test = await Note.findOneAndDelete(req.params.id);
+    const test = await Note.findByIdAndDelete(req.params.id);
 
     res.status(200).json({ success: true, deletedNote: test._doc });
   } catch (error) {
